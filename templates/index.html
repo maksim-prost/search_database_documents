@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Заголовок</title>
+</head>
+<body>
+	<h1>Some text for beauty</h1>
+	<!-- форма добавления документа -->
+	<form
+		id='uploadForm'
+		name = 'uploadForm'
+		action = "{{ url_for('index') }}"
+		accept = '.doc,.docx,.pdf,.odt'
+		enctype="multipart/form-data"
+  		method="POST">
+		<p><input type="file" id='file' name="file"></p>
+		<p><input type="button" id='file-upload' name="" value="Загрузить"></p>
+		</form>
+	<!-- форма поиска по документам -->
+	<form
+		action = "{{ url_for('index') }}"
+		enctype="multipart/form-data"
+  		method="GET" >
+		<p><input type="text" id='search' name="search" value="{{find}}">	</p>
+		<p><input type="submit" name="" value="Поиск"></p>	
+	</form>
+	<!-- вывод  поиска по бд -->
+	<ul>
+	{%for doc in result_search%}
+		
+		<li><a href="{{url_for('static', filename='file_storage/'+ doc)}}">{{ doc }}<a>
+			<ul>
+				{%for res in result_search[doc]%}
+					<li> {{res|safe}}</li>
+					<p></p>
+				{%endfor%}
+			</ul>
+		</li>
+		<p></p>
+	{%endfor%}
+	</ul>
+	<!-- выделение искомого выражения -->
+	<style type="text/css">
+		.find{
+			background-color: #069;
+		}
+	</style>
+	<!-- js для загрузки документов асинхронным ajax-запосом
+	во избежания подвисания страницы при загрузки больших документов -->
+	<script type="text/javascript" src="{{url_for('static', filename = 'js/script.js') }}"></script>
+</body>
+</html>
